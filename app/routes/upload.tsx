@@ -7,6 +7,11 @@ import { convertPdfToImage } from "~/lib/pdf2img";
 import { generateUUID } from "~/lib/utils";
 import { prepareInstructions } from "../../constants";
 
+/**
+ * Returns route metadata for the Upload page.
+ *
+ * @returns An array of metadata entries consumed by the routing framework — here providing the page `title` ("Upload") and a `description` ("upload your resume").
+ */
 export function meta() {
   return [
     { title: "Upload" },

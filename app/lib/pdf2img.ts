@@ -8,6 +8,15 @@ let pdfjsLib: any = null;
 let isLoading = false;
 let loadPromise: Promise<any> | null = null;
 
+/**
+ * Lazily loads and caches the pdf.js library (pdfjs-dist) for use elsewhere in the module.
+ *
+ * Loads pdfjs-dist/build/pdf.mjs once and returns the loaded library. Concurrent callers share a single in-progress
+ * load via an internal promise. As a side effect, sets `GlobalWorkerOptions.workerSrc` to "/pdf.worker.min.mjs"
+ * and updates module-level caching state so subsequent calls return the cached library immediately.
+ *
+ * @returns A promise that resolves to the imported pdf.js library.
+ */
 async function loadPdfJs(): Promise<any> {
   if (pdfjsLib) return pdfjsLib;
   if (loadPromise) return loadPromise;
@@ -25,6 +34,18 @@ async function loadPdfJs(): Promise<any> {
   return loadPromise;
 }
 
+/**
+ * Converts the first page of a PDF File into a PNG image and returns the result.
+ *
+ * This renders page 1 of the provided PDF at a high resolution (scale 4) to an offscreen
+ * canvas, then produces a PNG Blob and a File with the same base name as the input PDF.
+ *
+ * @param file - The PDF file to convert (only the first page is processed).
+ * @returns An object containing:
+ *  - `imageUrl`: a blob URL for the generated PNG (empty string on failure),
+ *  - `file`: a File wrapping the PNG blob (null on failure),
+ *  - `error` (optional): an error message when conversion failed.
+ */
 export async function convertPdfToImage(
   file: File,
 ): Promise<PdfConversionResult> {
