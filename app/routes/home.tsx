@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 import Navbar from "~/components/Navbar";
 import { resumes } from "../../constants";
 import ResumeCard from "~/components/ResumeCard";
-import { usePuterStore } from "~/components/lib/puter";
+import { usePuterStore } from "~/lib/puter";
 import { useLocation, useNavigate } from "react-router";
 import { useEffect } from "react";
 
